@@ -18,6 +18,7 @@ package com.rockerhieu.emojicon.emoji;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com)
+ * 普通笑脸的实体类
  */
 public class People {
     public static final Emojicon[] DATA = new Emojicon[]{

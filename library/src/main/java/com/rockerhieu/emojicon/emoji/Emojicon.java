@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com)
+ * Emoj 的是实体类
  */
 public class Emojicon implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,6 +31,12 @@ public class Emojicon implements Serializable {
     private Emojicon() {
     }
 
+    /**
+     * 从资源文件中 获取emoj
+     * @param icon
+     * @param value
+     * @return
+     */
     public static Emojicon fromResource(int icon, int value) {
         Emojicon emoji = new Emojicon();
         emoji.icon = icon;
@@ -37,12 +44,22 @@ public class Emojicon implements Serializable {
         return emoji;
     }
 
+    /**
+     * 从编码值获取 emoj
+     * @param codePoint 编码值
+     * @return
+     */
     public static Emojicon fromCodePoint(int codePoint) {
         Emojicon emoji = new Emojicon();
         emoji.emoji = newString(codePoint);
         return emoji;
     }
 
+    /**
+     * 从char中获取emoj
+     * @param ch
+     * @return
+     */
     public static Emojicon fromChar(char ch) {
         Emojicon emoji = new Emojicon();
         emoji.emoji = Character.toString(ch);
