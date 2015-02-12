@@ -24,11 +24,11 @@
 
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/use_system_default"
-        android:id="@+id/use_system_default"
-        android:checked="false"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/use_system_default"
+            android:id="@+id/use_system_default"
+            android:checked="false"/>
 
     <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/txtEmojicon"
@@ -43,8 +43,11 @@
             emojicon:emojiconSize="28sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+    <View android:layout_width="fill_parent"
+          android:layout_weight="1"
+          android:layout_height="0dp"/>
     <FrameLayout
             android:id="@+id/emojicons"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="220dp"/>
 </LinearLayout>

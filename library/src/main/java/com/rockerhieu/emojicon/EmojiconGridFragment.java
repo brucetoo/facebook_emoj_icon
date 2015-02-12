@@ -16,10 +16,13 @@
 
 package com.rockerhieu.emojicon;
 
-import java.util.Arrays;
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import com.rockerhieu.emojicon.emoji.Emojicon;
 import com.rockerhieu.emojicon.emoji.People;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com)
@@ -36,8 +43,10 @@ public class EmojiconGridFragment extends Fragment implements AdapterView.OnItem
     private EmojiconRecents mRecents;
     private Emojicon[] mData;
     private boolean mUseSystemDefault = false;
-
+    protected ViewPager mViewPager;
+    protected CirclePageIndicator mIndicator;
     private static final String USE_SYSTEM_DEFAULT_KEY = "useSystemDefaults";
+    private List<GridView> views;
 
     protected static EmojiconGridFragment newInstance(Emojicon[] emojicons, EmojiconRecents recents) {
         return newInstance(emojicons, recents, false);
@@ -55,12 +64,29 @@ public class EmojiconGridFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.emojicon_grid, container, false);
+        View view = inflater.inflate(R.layout.emoji_item_fragment, null);
+        mViewPager = (ViewPager) view.findViewById(R.id.item_viewpager);
+        mIndicator = (CirclePageIndicator) view.findViewById(R.id.page_indicator);
+//        return inflater.inflate(R.layout.emojicon_grid, container, false);
+        return view;
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        GridView gridView = (GridView) view.findViewById(R.id.Emoji_GridView);
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            mData = People.DATA;
+            mUseSystemDefault = false;
+        } else {
+            Object[] o = (Object[]) getArguments().getSerializable("emojicons");
+            mData = Arrays.asList(o).toArray(new Emojicon[o.length]);
+            mUseSystemDefault = bundle.getBoolean(USE_SYSTEM_DEFAULT_KEY);
+        }
+        initPage();
+        mViewPager.setAdapter(new EmojiSingleAdapter(views));
+        mIndicator.setViewPager(mViewPager);
+    /*    GridView gridView = (GridView) view.findViewById(R.id.Emoji_GridView);
         Bundle bundle = getArguments();
         if (bundle == null) {
             mData = People.DATA;
@@ -71,7 +97,27 @@ public class EmojiconGridFragment extends Fragment implements AdapterView.OnItem
             mUseSystemDefault = bundle.getBoolean(USE_SYSTEM_DEFAULT_KEY);
         }
         gridView.setAdapter(new EmojiAdapter(view.getContext(), mData, mUseSystemDefault));
-        gridView.setOnItemClickListener(this);
+        gridView.setOnItemClickListener(this);*/
+    }
+
+    private void initPage() {
+        int pageCount = (int) Math.ceil(mData.length / 28.0f);
+        List<Emojicon> item = Arrays.asList(mData);
+        views = new ArrayList<GridView>();
+        for (int i = 0; i < pageCount; i++) {
+            GridView gv = new GridView(getActivity());
+            gv.setGravity(Gravity.CENTER);
+            gv.setClickable(true);
+            gv.setFocusable(true);
+            gv.setNumColumns(7);
+            if (i == pageCount - 1) {
+                gv.setAdapter(new EmojiAdapter(getActivity(), item.subList(i*28, item.size()-1),mUseSystemDefault));
+            } else
+                gv.setAdapter(new EmojiAdapter(getActivity(), item.subList(i*28, (i+1) * 28),mUseSystemDefault));
+            gv.setOnItemClickListener(this);
+            gv.setSelector(new ColorDrawable(Color.GRAY));
+            views.add(gv);
+        }
     }
 
     @Override
@@ -105,7 +151,7 @@ public class EmojiconGridFragment extends Fragment implements AdapterView.OnItem
         }
         if (mRecents != null) {
             mRecents.addRecentEmoji(view.getContext(), ((Emojicon) parent
-                .getItemAtPosition(position)));
+                    .getItemAtPosition(position)));
         }
     }
 

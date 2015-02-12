@@ -16,12 +16,15 @@
 
 package com.rockerhieu.emojicon;
 
-import com.rockerhieu.emojicon.emoji.Emojicon;
-
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 
 /**
  * @author Daniele Ricci
@@ -29,7 +32,8 @@ import android.widget.GridView;
 public class EmojiconRecentsGridFragment extends EmojiconGridFragment implements EmojiconRecents {
     private EmojiAdapter mAdapter;
     private boolean mUseSystemDefault = false;
-
+//    private List<GridView> views;
+//    private EmojiSingleAdapter mSingleAdapter;
     private static final String USE_SYSTEM_DEFAULT_KEY = "useSystemDefaults";
 
     protected static EmojiconRecentsGridFragment newInstance() {
@@ -55,13 +59,44 @@ public class EmojiconRecentsGridFragment extends EmojiconGridFragment implements
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.emojicon_grid, container, false);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         EmojiconRecentsManager recents = EmojiconRecentsManager
             .getInstance(view.getContext());
-
+//        if(recents != null) {
+//
+//
+//            int pageCount = (int) Math.ceil(recents.size() / 28.0f);
+//            //  List<Emojicon> item = Arrays.asList(recents);
+//            views = new ArrayList<GridView>();
+//            mSingleAdapter = new EmojiSingleAdapter(views);
+//            mViewPager.setAdapter(mSingleAdapter);
+//            mIndicator.setViewPager(mViewPager);
+//            for (int i = 0; i < pageCount; i++) {
+//                GridView gv = new GridView(getActivity());
+//                gv.setGravity(Gravity.CENTER);
+//                gv.setClickable(true);
+//                gv.setFocusable(true);
+//                 gv.setNumColumns(7);
+//                if (i == pageCount - 1) {
+//                    mAdapter = new EmojiAdapter(getActivity(), recents.subList(i * 28, recents.size() - 1));
+//                    gv.setAdapter(mAdapter);
+//                } else {
+//                    mAdapter = new EmojiAdapter(getActivity(), recents.subList(i * 28, (i + 1) * 28));
+//                    gv.setAdapter(mAdapter);
+//                }
+//                gv.setOnItemClickListener(this);
+//                views.add(gv);
+//            }
+//        }
         mAdapter = new EmojiAdapter(view.getContext(), recents, mUseSystemDefault);
         GridView gridView = (GridView) view.findViewById(R.id.Emoji_GridView);
         gridView.setAdapter(mAdapter);
+        gridView.setSelector(new ColorDrawable(Color.GRAY));
         gridView.setOnItemClickListener(this);
     }
 
