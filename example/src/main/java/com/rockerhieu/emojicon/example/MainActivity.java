@@ -55,6 +55,10 @@ public class MainActivity extends FragmentActivity implements EmojiconGridFragme
             }
         });
 
+        /**
+         * 简单的使用方法，需要要 在xml中放置一个220dp的FragmentLayout,然后
+         * 调用以下方法就Ok,需要实现点击和删除的接口
+         */
         setEmojiconFragment(false);
     }
 
@@ -67,11 +71,17 @@ public class MainActivity extends FragmentActivity implements EmojiconGridFragme
 
     @Override
     public void onEmojiconClicked(Emojicon emojicon) {
+        /**
+         * 在emojEditext中添加表情
+         */
         EmojiconsFragment.input(mEditEmojicon, emojicon);
     }
 
     @Override
     public void onEmojiconBackspaceClicked(View v) {
+        /**
+         * 在emojEditext中删除表情
+         */
         EmojiconsFragment.backspace(mEditEmojicon);
     }
 }
